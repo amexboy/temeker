@@ -1,0 +1,14 @@
+{
+  "name": "temeker",
+  "version": "1.0.0",
+  "description": "Temeker Telegram bot ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Amanu;Et COVID-19 Response team",
+  "license": "ISC",
+  "dependencies": {
+    "telegraf": "^3.36.0"
+  }
+}
