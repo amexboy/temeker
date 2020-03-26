@@ -21,14 +21,13 @@ RUN npm install
 # copy app sources
 COPY . .
 
-RUN npm run build
-
 #
 # ---- Release ----
 FROM base AS release
 WORKDIR /root/chat
 
-COPY --from=dependencies /root/chat/.nuxt ./.nuxt
+COPY --from=dependencies /root/chat/node_modules ./node_modules
+COPY --from=dependencies /root/chat/src ./src
 # expose port and define CMD
 EXPOSE 1000
-CMD npm run start
+CMD node src/index.js

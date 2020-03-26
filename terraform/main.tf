@@ -12,7 +12,7 @@ resource "aws_iam_role_policy" "temeker_bot" {
     "Statement": [
       {
         "Action": [
-          "ec2:Describe*"
+          "*"
         ],
         "Effect": "Allow",
         "Resource": "*"

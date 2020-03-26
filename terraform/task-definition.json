@@ -1,7 +1,7 @@
 [
   {
     "name": "temeker",
-    "image": "732548001766.dkr.ecr.us-east-1.amazonaws.com/temeker",
+    "image": "732548001766.dkr.ecr.us-east-1.amazonaws.com/temeker-bot:1.0",
     "cpu": 100,
     "memory": 512,
     "essential": true,

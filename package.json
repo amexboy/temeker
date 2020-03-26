@@ -12,10 +12,5 @@
   "dependencies": {
     "express": "^4.17.1",
     "telegraf": "^3.36.0"
-  },
-  "devDependencies": {
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
   }
 }
