@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "temeker_bot_role" {
 
     principals {
       type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
+      identifiers = ["ecs-tasks.amazonaws.com", "ecs.amazonaws.com"]
     }
     effect = "Allow"
   }
@@ -123,9 +123,11 @@ resource "aws_ecr_repository" "temeker_ecr" {
   name                 = "temeker-bot"
   image_tag_mutability = "MUTABLE"
 }
-
-resource "aws_vpc" "covid_prod" {
-  cidr_block = "10.2.0.0/16"
+resource "aws_lb" "temeker_lb" {
+  name               = "temeker-bot"
+  internal           = false
+  load_balancer_type = "application"
+  subnets = aws_subnet.covid_public_prod[*].id
 }
 
 resource "aws_lb_target_group" "temeker_tg" {
@@ -133,6 +135,7 @@ resource "aws_lb_target_group" "temeker_tg" {
   port     = 9000
   protocol = "HTTP"
   vpc_id   = aws_vpc.covid_prod.id
+  depends_on = [aws_lb.temeker_lb]
 }
 
 resource "aws_ecs_service" "temeker_bot" {
@@ -155,41 +158,11 @@ resource "aws_ecs_service" "temeker_bot" {
 }
 
 resource "aws_ecs_task_definition" "temeker_bot" {
-  family                = "service"
+  family                = "temeker"
   container_definitions = file("task-definition.json")
 
   # volume {
   #   name      = "service-storage"
   #   host_path = "/ecs/service-storage"
   # }
-}
-
-resource "aws_launch_template" "lunch_template" {
-  name_prefix   = "foobar"
-  image_id      = "ami-04ac550b78324f651"
-  instance_type = "t2.micro"
-}
-
-resource "aws_autoscaling_group" "covid_prod" {
-  availability_zones = ["us-east-1a"]
-  desired_capacity   = 1
-  max_size           = 1
-  min_size           = 1
-
-  launch_template {
-    id      = aws_launch_template.lunch_template.id
-    version = "$Latest"
-  }
-}
-
-resource "aws_ecs_cluster" "prod_cluster" {
-  name = "covid-19-prod"
-}
-
-resource "aws_ecs_capacity_provider" "covid_ecs_cp" {
-  name = "test"
-
-  auto_scaling_group_provider {
-    auto_scaling_group_arn         = aws_autoscaling_group.covid_prod.arn
-  }
 }
