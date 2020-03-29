@@ -4,10 +4,9 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - docker build -t 732548001766.dkr.ecr.us-east-1.amazonaws.com/temeker:prod -t 732548001766.dkr.ecr.us-east-1.amazonaws.com/temeker:$CODEBUILD_SOURCE_VERSION . 
+      - docker build -t $IMAGE_REPO:prod -t $IMAGE_REPO:$CODEBUILD_SOURCE_VERSION . 
       - echo Build completed on `date`
-      - docker push 732548001766.dkr.ecr.us-east-1.amazonaws.com/temeker-bot:prod 
-  post_build:
-    commands:
+      - docker push $IMAGE_REPO:prod 
+      - docker push $IMAGE_REPO:$CODEBUILD_SOURCE_VERSION 
       - echo "Restarting ecs service"
       - aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $ECS_CLUSTER_NAME --desired-count 1 --force-new-deployment  
