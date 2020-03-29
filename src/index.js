@@ -23,6 +23,11 @@ const port = 9000
 app.get("/health", (req, res) => {
 	res.send("UP")
 })
+
+app.get("/echo", (req, res) => {
+	res.send(req)
+})
+
 app.post('/form', (req, res) => {
 	console.log(chatId)
         telegram.sendMessage(chatId, "Hi, we have received your response" + req)
